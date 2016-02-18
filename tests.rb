@@ -106,10 +106,17 @@ class ApplicationTest < Minitest::Test
     user = User.create
     user2 = User.create(first_name: "Brian")
     user3 = User.create(first_name: "Brian", last_name: "Yarsawich")
-    user4 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "test@test.com")
+    user4 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "testing@test.com")
     refute User.exists?(user.id)
     refute User.exists?(user2.id)
     refute User.exists?(user3.id)
     assert User.exists?(user4.id)
+  end
+
+  def test_user_email_must_be_unique
+    user = User.create(first_name: "Brian", last_name: "Yarsawich", email: "test@test.com")
+    user2 = User.create(first_name: "John", last_name: "Doe", email: "test@test.com")
+    assert User.exists?(user.id)
+    refute User.exists?(user2.id)
   end
 end
