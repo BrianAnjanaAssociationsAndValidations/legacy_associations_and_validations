@@ -42,7 +42,7 @@ class ApplicationTest < Minitest::Test
     assert_equal 2, school.terms.count
   end
 
-  # Associate terms with courses (both directions). If a term has any courses associated with it, the term should not be deletable.
+  # Associate terms with courses (both directions).
   def test_terms_are_associated_with_courses
     term = Term.create(name: "Sprint 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
     course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
@@ -52,6 +52,18 @@ class ApplicationTest < Minitest::Test
     assert term.courses << course_one
 
     assert_equal 2, term.courses.count
+  end
+
+  # If a term has any courses associated with it, the term should not be deletable.
+  def test_if_a_term_has_courses_it_can_not_be_deleted
+    term = Term.create(name: "Sprint 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "JS6", color: "Mustard")
+
+    assert term.courses << course
+    assert term.courses << course_one
+
+    refute term.destroy
   end
 
   # Associate courses with course_students (both directions). If the course has any students associated with it, the course should not be deletable.
