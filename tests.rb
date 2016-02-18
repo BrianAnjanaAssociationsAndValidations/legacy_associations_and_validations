@@ -12,6 +12,7 @@ ActiveRecord::Base.establish_connection(
   database: 'test.sqlite3'
 )
 
+ActiveRecord::Migration.verbose = false
 # Gotta run migrations before we can run tests.  Down will fail the first time,
 # so we wrap it in a begin/rescue.
 begin ApplicationMigration.migrate(:down); rescue; end
@@ -72,5 +73,20 @@ class ApplicationTest < Minitest::Test
 
     refute Lesson.exists?(lesson1.id)
     refute Lesson.exists?(lesson2.id)
+  end
+
+  def test_course_has_many_readings_through_lessons
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    lesson1 = Lesson.create(name: "Algerbra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    lesson2 = Lesson.create(name: "Basketweaving", description: "For all our sports stars", outline: "Weave a basket and get an A")
+    reading1 = Reading.create(caption: "Back to Basics", url: "http://stopfailingatmaths.com", order_number: 1)
+    reading2 = Reading.create(caption: "Linear Algebra", url: "http://sureyourereadyforthis.com", order_number: 2)
+
+    course.lessons << lesson1
+    course.lessons << lesson2
+    lesson1.readings << reading1
+    lesson1.readings << reading2
+
+    assert_equal 2, course.readings.count
   end
 end
