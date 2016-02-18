@@ -89,4 +89,14 @@ class ApplicationTest < Minitest::Test
 
     assert_equal 2, course.readings.count
   end
+
+  def test_course_has_many_course_instructors
+    # course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    # instructor1 = Instructor.create(name:)
+  end
+
+  def test_school_must_have_name
+    school = School.create
+    refute School.exists?(school.id)
+  end
 end
