@@ -59,4 +59,18 @@ class ApplicationTest < Minitest::Test
 
     assert 2, course.lessons.count
   end
+
+  def test_lessons_are_deleted_if_parent_course_is_deleted
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    lesson1 = Lesson.create(name: "Algerbra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    lesson2 = Lesson.create(name: "Basketweaving", description: "For all our sports stars", outline: "Weave a basket and get an A")
+
+    course.lessons << lesson1
+    course.lessons << lesson2
+
+    course.destroy
+
+    refute Lesson.exists?(lesson1.id)
+    refute Lesson.exists?(lesson2.id)
+  end
 end
