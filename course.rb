@@ -1,5 +1,5 @@
 class Course < ActiveRecord::Base
-
+  has_many :lessons
   default_scope { order("courses.term_id DESC, courses.course_code, courses.id DESC") }
 
   # Magic number also used in old? method below.
