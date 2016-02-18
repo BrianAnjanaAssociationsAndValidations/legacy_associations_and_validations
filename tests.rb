@@ -97,6 +97,19 @@ class ApplicationTest < Minitest::Test
 
   def test_school_must_have_name
     school = School.create
+    school2 = School.create(name: "The Iron Yard")
     refute School.exists?(school.id)
+    assert School.exists?(school2.id)
+  end
+
+  def test_user_must_have_first_name_last_name_and_email
+    user = User.create
+    user2 = User.create(first_name: "Brian")
+    user3 = User.create(first_name: "Brian", last_name: "Yarsawich")
+    user4 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "test@test.com")
+    refute User.exists?(user.id)
+    refute User.exists?(user2.id)
+    refute User.exists?(user3.id)
+    assert User.exists?(user4.id)
   end
 end
