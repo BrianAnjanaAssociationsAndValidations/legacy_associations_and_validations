@@ -205,6 +205,17 @@ class ApplicationTest < Minitest::Test
     assert course_one.assignments << assign3
   end
 
+  def test_students_are_associated_with_course_students
+    maths_student = CourseStudent.new
+    english_student = CourseStudent.new
+    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com")
+
+    assert user.students << maths_student
+    assert user.students << english_student
+
+    assert 2, user.students.count
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
