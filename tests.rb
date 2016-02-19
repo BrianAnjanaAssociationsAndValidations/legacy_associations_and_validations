@@ -101,10 +101,10 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_school_must_have_name
-    school = School.create
-    school2 = School.create(name: "The Iron Yard")
-    refute School.exists?(school.id)
-    assert School.exists?(school2.id)
+    school = School.new
+    school2 = School.new(name: "The Iron Yard")
+    refute school.save
+    assert school2.save
   end
 
   def test_user_must_have_first_name_last_name_and_email
@@ -119,10 +119,17 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_user_email_must_be_unique
-    user = User.create(first_name: "Brian", last_name: "Yarsawich", email: "test@test.com")
-    user2 = User.create(first_name: "John", last_name: "Doe", email: "test@test.com")
-    assert User.exists?(user.id)
-    refute User.exists?(user2.id)
+    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "test@test.com")
+    user2 = User.new(first_name: "John", last_name: "Doe", email: "test@test.com")
+    assert user.save
+    refute user2.save
+  end
+
+  def test_user_email_must_be_formated_correctly
+    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testemailformat@test.com")
+    user2 = User.new(first_name: "John", last_name: "Doe", email: "I am 31337 Haxz0r")
+    assert user.save
+    refute user2.save
   end
 
   # Associate schools with terms (both directions).
