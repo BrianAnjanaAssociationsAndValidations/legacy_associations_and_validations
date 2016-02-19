@@ -251,6 +251,7 @@ class ApplicationTest < Minitest::Test
     assert_equal instructor1, course.primary_instructor
 
     assert course.primary_instructor = instructor3
+    refute_equal instructor1, course.primary_instructor
     assert_equal instructor3, course.primary_instructor
   end
 
