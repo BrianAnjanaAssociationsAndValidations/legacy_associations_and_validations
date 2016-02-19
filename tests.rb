@@ -101,35 +101,74 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_school_must_have_name
-    school = School.create
-    school2 = School.create(name: "The Iron Yard")
-    refute School.exists?(school.id)
-    assert School.exists?(school2.id)
+    school = School.new
+    school2 = School.new(name: "The Iron Yard")
+    refute school.save
+    assert school2.save
+  end
+
+  #Validate that Terms must have name, starts_on, ends_on, and school_id.
+  def test_terms_validation
+    school = School.create(name: "The Iron Yard")
+    term = Term.new(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    term_two = Term.new(name: "Fall 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    school.terms << term
+    assert term.save
+    refute term_two.save
   end
 
   def test_user_must_have_first_name_last_name_and_email
-    user = User.create
-    user2 = User.create(first_name: "Brian")
-    user3 = User.create(first_name: "Brian", last_name: "Yarsawich")
-    user4 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "testing@test.com")
-    refute User.exists?(user.id)
-    refute User.exists?(user2.id)
-    refute User.exists?(user3.id)
-    assert User.exists?(user4.id)
+    user = User.new
+    user2 = User.new(first_name: "Brian")
+    user3 = User.new(first_name: "Brian", last_name: "Yarsawich")
+    user4 = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testing@test.com")
+    refute user.save
+    refute user2.save
+    refute user3.save
+    assert user4.save
   end
 
   def test_user_email_must_be_unique
-    user = User.create(first_name: "Brian", last_name: "Yarsawich", email: "test@test.com")
-    user2 = User.create(first_name: "John", last_name: "Doe", email: "test@test.com")
-    assert User.exists?(user.id)
-    refute User.exists?(user2.id)
+    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "test@test.com")
+    user2 = User.new(first_name: "John", last_name: "Doe", email: "test@test.com")
+    assert user.save
+    refute user2.save
+  end
+
+  def test_user_email_must_be_formated_correctly
+    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testemailformat@test.com")
+    user2 = User.new(first_name: "John", last_name: "Doe", email: "I am 31337 Haxz0r")
+    assert user.save
+    refute user2.save
+  end
+
+  def test_user_photo_url_must_start_as_web_address
+    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com")
+    user2 = User.new(first_name: "John", last_name: "Doe", email: "testphotourl2@test.com", photo_url: "not.a.web.address.com")
+    assert user.save
+    refute user2.save
+  end
+
+  def test_validate_assignments
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    assign1 = Assignment.new
+    assign2 = Assignment.new(name: "Midterm")
+    assign3 = Assignment.new(name: "Final", percent_of_grade: 20)
+    assign4 = Assignment.new(name: "Quiz1", percent_of_grade: 5.2)
+
+    course.assignments << assign4
+
+    refute assign1.save
+    refute assign2.save
+    refute assign3.save
+    assert assign4.save
   end
 
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
     term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
-    term_two = Term.create(name: "Fall 2016 Cohort")
+    term_two = Term.create(name: "Fall 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
 
     assert school.terms << term
     assert school.terms << term_two
@@ -139,10 +178,11 @@ class ApplicationTest < Minitest::Test
 
   # Associate terms with courses (both directions).
   def test_terms_are_associated_with_courses
-    term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "JST600", color: "Mustard")
-
+    school = School.create(name: "The Iron Yard")
+    term = Term.new(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    course = Course.new(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.new(name: "Front End", course_code: "JST600", color: "Mustard")
+    school.terms << term
     assert term.courses << course
     assert term.courses << course_one
 
@@ -188,9 +228,9 @@ class ApplicationTest < Minitest::Test
   # Associate assignments with courses (both directions).
   def test_assignments_are_associated_with_courses
     course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
-    assignment = Assignment.create(name: "Battleship")
-    assignment_two = Assignment.create(name: "Currency Converter")
-    assignment_three = Assignment.create(name: "Time Entries")
+    assignment = Assignment.create(name: "Battleship", percent_of_grade: 10)
+    assignment_two = Assignment.create(name: "Currency Converter", percent_of_grade: 10)
+    assignment_three = Assignment.create(name: "Time Entries", percent_of_grade: 10)
 
     assert course.assignments << assignment
     assert course.assignments << assignment_two
@@ -202,9 +242,9 @@ class ApplicationTest < Minitest::Test
   # When a course is destroyed, its assignments should be automatically destroyed.
   def test_assignments_are_deleted_when_course_is_deleted
     course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
-    assignment = Assignment.create(name: "Battleship")
-    assignment_two = Assignment.create(name: "Currency Converter")
-    assignment_three = Assignment.create(name: "Time Entries")
+    assignment = Assignment.create(name: "Battleship", percent_of_grade: 10)
+    assignment_two = Assignment.create(name: "Currency Converter", percent_of_grade: 10)
+    assignment_three = Assignment.create(name: "Time Entries", percent_of_grade: 10)
 
     assert course.assignments << assignment
     assert course.assignments << assignment_two
@@ -218,9 +258,11 @@ class ApplicationTest < Minitest::Test
 
   # Associate lessons with their pre_class_assignments (both directions).
   def test_lessons_are_associated_with_their_pre_class_assignments
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
-    assignment = Assignment.create(name: "Variables")
+    assignment = Assignment.create(name: "Variables", percent_of_grade: 10)
 
+    course.assignments << assignment
     assert lesson.pre_class_assignment = assignment
 
     assert_equal Assignment.find(assignment.id), lesson.pre_class_assignment
