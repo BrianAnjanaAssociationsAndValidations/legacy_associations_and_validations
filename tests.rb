@@ -282,6 +282,21 @@ class ApplicationTest < Minitest::Test
     assert_equal lesson1, lesson2.parent_lesson
   end
 
+  def test_child_lessons_are_ordered_by_id
+    lesson1 = Lesson.create(name: "Algerbra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    lesson2 = Lesson.create(name: "Basketweaving", description: "For all our sports stars", outline: "Weave a basket and get an A")
+    lesson3 = Lesson.create(name: "Physics", description: "stuff bangs together")
+    lesson4 = Lesson.create(name: "Gym Class", description: "For all our sports stars")
+    lesson5 = Lesson.create(name: "Hipsterism", description: "put a bird on it")
+
+    assert lesson1.child_lessons << lesson3
+    assert lesson1.child_lessons << lesson2
+    assert lesson3.child_lessons << lesson4
+    assert lesson2.child_lessons << lesson5 
+
+    assert_equal [lesson2, lesson3, lesson5, lesson4], Lesson.where("parent_lesson_id IS NOT NULL")
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
