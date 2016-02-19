@@ -1,4 +1,7 @@
 class Lesson < ActiveRecord::Base
+
+  has_many :readings, dependent: :destroy
+  belongs_to :course
   # has_many :assignments
   # has_many :pre_class_assignments, through: :assignments
 
