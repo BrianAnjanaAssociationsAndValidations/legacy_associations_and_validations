@@ -454,6 +454,17 @@ class ApplicationTest < Minitest::Test
   end
 
   # Set up a Course to have many instructors through the Course's course_instructors.
+  def test_course_has_many_instructors_through_course_instructors
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    mason = User.create(first_name: "Mason", last_name: "Matthews", email: "mason@email.com", photo_url: "https://avatars1.githubusercontent.com/u/5350842?v=3&s=400")
+    da_me = User.create(first_name: "Da-Me", last_name: "Kim", email: "dame@email.com")
+
+    course.instructors << mason
+    course.instructors << da_me
+
+    assert_equal 2, course.course_instructors.count
+    assert_equal 2, course.instructors.count
+  end
 
   # Validate that an Assignment's due_at field is not before the Assignment's active_at.
 
