@@ -455,6 +455,18 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that an Assignment's due_at field is not before the Assignment's active_at.
+  def test_assignments_due_at_field_is_not_before_active_at_field
+    battleship = Assignment.create(name: "Battleship", percent_of_grade: 10, course_id: 2)
+    currency = Assignment.create(name: "Currency Converter", percent_of_grade: 10, course_id: 2)
 
+    battleship.due_at = "2016-02-10"
+    battleship.active_at = "2016-2-08"
+
+    currency.due_at = "2016-02-14"
+    currency.active_at = "2016-02-16"
+
+    assert battleship.save
+    refute currency.save
+  end
 
 end

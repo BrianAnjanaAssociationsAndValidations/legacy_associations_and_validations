@@ -7,6 +7,13 @@ class Assignment < ActiveRecord::Base
   validates :name, presence: true, uniqueness: {scope: :course_id}
   validates :percent_of_grade, presence: true
   validates :course_id, presence: true
+  validate :active_date_is_before_due_date
+
+  def active_date_is_before_due_date
+    if (active_at && due_at) && (active_at > due_at)
+      errors.add(:active_at)
+    end
+  end
 
   scope :active_for_students, -> { where("active_at <= ? AND due_at >= ? AND students_can_submit = ?", Time.now, Time.now, true) }
 
