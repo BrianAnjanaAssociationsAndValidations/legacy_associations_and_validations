@@ -249,6 +249,15 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that Readings must have an order_number, a lesson_id, and a url.
+  def test_readings_must_have_order_number_lesson_id_and_url
+    reading = Reading.create(order_number: 1234, lesson_id: 223, url: "http://www.google.com")
+    reading_two = Reading.create(caption: "Back to Basics", url: "http://stopfailingatmaths.com", order_number: 1)
+    reading_three = Reading.create()
+
+    assert Reading.exists?(reading.id)
+    refute Reading.exists?(reading_two.id)
+    refute Reading.exists?(reading_three.id)
+  end
 
 
   # Validate that the Readings url must start with http:// or https://. Use a regular expression.
