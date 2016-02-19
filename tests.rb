@@ -227,6 +227,18 @@ class ApplicationTest < Minitest::Test
     assert_equal 2, student.assignment_grades.count
   end
 
+  def test_course_has_many_students_through_course_students
+    student1 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com")
+    student2 = User.create(first_name: "John", last_name: "Doe", email: "testphotourl2@test.com", photo_url: "http://is.a.web.address.com")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet", term_id: 10)
+
+    assert course.students << student1
+    assert course.students << student2
+
+    assert_equal 2, course.students.count
+    assert_equal 2, course.course_students.count
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
