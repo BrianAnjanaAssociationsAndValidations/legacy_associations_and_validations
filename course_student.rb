@@ -19,8 +19,8 @@ class CourseStudent < ActiveRecord::Base
   end
 
   def assignment_grade
-    #This method does not simply call percent_graded to get the total, as that
-    #  would require performing the loop twice.
+    # This method does not simply call percent_graded to get the total, as that
+    # would require performing the loop twice.
     weighted_total = 0
     percent_total = 0
     assignment_grades.graded.each do |ag|

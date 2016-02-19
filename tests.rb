@@ -123,7 +123,7 @@ class ApplicationTest < Minitest::Test
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
-    term = Term.create(name: "Sprint 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
     term_two = Term.create(name: "Fall 2016 Cohort")
 
     assert school.terms << term
@@ -134,7 +134,7 @@ class ApplicationTest < Minitest::Test
 
   # Associate terms with courses (both directions).
   def test_terms_are_associated_with_courses
-    term = Term.create(name: "Sprint 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
     course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
     course_one = Course.create(name: "Front End", course_code: "JS6", color: "Mustard")
 
@@ -146,7 +146,7 @@ class ApplicationTest < Minitest::Test
 
   # If a term has any courses associated with it, the term should not be deletable.
   def test_if_a_term_has_courses_it_can_not_be_deleted
-    term = Term.create(name: "Sprint 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
     course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
     course_one = Course.create(name: "Front End", course_code: "JS6", color: "Mustard")
 
@@ -226,7 +226,18 @@ class ApplicationTest < Minitest::Test
   # end
 
   # Set up a School to have many courses through the school's terms.
+  def test_school_can_have_many_courses_through_terms
+    school = School.create(name: "The Iron Yard")
+    term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "JS6", color: "Mustard")
 
+    school.terms << term
+    term.courses << course
+    term.courses << course_one
+
+    assert_equal 2, school.courses.count
+  end
 
   # Validate that Lessons have names.
 
