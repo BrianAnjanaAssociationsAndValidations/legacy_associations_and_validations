@@ -3,7 +3,7 @@ class Reading < ActiveRecord::Base
 
   validates :lesson_id, presence: true
   validates :order_number, presence: true
-  validates :url, presence: true 
+  validates :url, presence: true, format: { with: /(http)s?:\/\/.*/}
 
   default_scope { order('order_number') }
 
