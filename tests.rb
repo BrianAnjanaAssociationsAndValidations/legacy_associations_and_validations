@@ -264,9 +264,11 @@ class ApplicationTest < Minitest::Test
   def test_readings_url_are_real
     reading = Reading.new(order_number: 1234, lesson_id: 223, url: "www.google.com")
     reading_two = Reading.new(order_number: 1, lesson_id: 254, url: "http://stopfailingatmaths.com")
+    reading_three = Reading.new(order_number: 3, lesson_id: 274, url: "56672http://stopfailingatmaths.com")
 
     assert reading_two.save
     refute reading.save
+    refute reading_three.save
   end
 
   # Validate that Courses have a course_code and a name.
