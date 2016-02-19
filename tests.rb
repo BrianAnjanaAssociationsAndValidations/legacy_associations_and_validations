@@ -270,7 +270,15 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that Courses have a course_code and a name.
+  def test_courses_must_have_course_code_and_name
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course_one = Course.create(course_code: "JS6", color: "Mustard")
+    course_two = Course.create(name: "Front End", color: "Mustard")
 
+    assert Course.exists?(course.id)
+    refute Course.exists?(course_one.id)
+    refute Course.exists?(course_two.id)
+  end
 
   # Validate that the course_code is unique within a given term_id.
 
