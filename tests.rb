@@ -149,6 +149,21 @@ class ApplicationTest < Minitest::Test
     refute user2.save
   end
 
+  def test_validate_assignments
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    assign1 = Assignment.new
+    assign2 = Assignment.new(name: "Midterm")
+    assign3 = Assignment.new(name: "Final", percent_of_grade: 20)
+    assign4 = Assignment.new(name: "Quiz1", percent_of_grade: 5.2)
+
+    course.assignments << assign4
+
+    refute assign1.save
+    refute assign2.save
+    refute assign3.save
+    assert assign4.save
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
@@ -213,9 +228,9 @@ class ApplicationTest < Minitest::Test
   # Associate assignments with courses (both directions).
   def test_assignments_are_associated_with_courses
     course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
-    assignment = Assignment.create(name: "Battleship")
-    assignment_two = Assignment.create(name: "Currency Converter")
-    assignment_three = Assignment.create(name: "Time Entries")
+    assignment = Assignment.create(name: "Battleship", percent_of_grade: 10)
+    assignment_two = Assignment.create(name: "Currency Converter", percent_of_grade: 10)
+    assignment_three = Assignment.create(name: "Time Entries", percent_of_grade: 10)
 
     assert course.assignments << assignment
     assert course.assignments << assignment_two
@@ -227,9 +242,9 @@ class ApplicationTest < Minitest::Test
   # When a course is destroyed, its assignments should be automatically destroyed.
   def test_assignments_are_deleted_when_course_is_deleted
     course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
-    assignment = Assignment.create(name: "Battleship")
-    assignment_two = Assignment.create(name: "Currency Converter")
-    assignment_three = Assignment.create(name: "Time Entries")
+    assignment = Assignment.create(name: "Battleship", percent_of_grade: 10)
+    assignment_two = Assignment.create(name: "Currency Converter", percent_of_grade: 10)
+    assignment_three = Assignment.create(name: "Time Entries", percent_of_grade: 10)
 
     assert course.assignments << assignment
     assert course.assignments << assignment_two
@@ -243,9 +258,11 @@ class ApplicationTest < Minitest::Test
 
   # Associate lessons with their pre_class_assignments (both directions).
   def test_lessons_are_associated_with_their_pre_class_assignments
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
-    assignment = Assignment.create(name: "Variables")
+    assignment = Assignment.create(name: "Variables", percent_of_grade: 10)
 
+    course.assignments << assignment
     assert lesson.pre_class_assignment = assignment
 
     assert_equal Assignment.find(assignment.id), lesson.pre_class_assignment
