@@ -270,6 +270,18 @@ class ApplicationTest < Minitest::Test
     assert_equal [student2, student4, student3, student1], course.students
   end
 
+  def test_lessons_associated_with_child_lessons
+    lesson1 = Lesson.create(name: "Algerbra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    lesson2 = Lesson.create(name: "Basketweaving", description: "For all our sports stars", outline: "Weave a basket and get an A")
+    lesson3 = Lesson.create(name: "Physics", description: "stuff bangs together")
+
+    assert lesson1.child_lessons << lesson3
+    assert lesson1.child_lessons << lesson2
+
+    assert_equal 2, lesson1.child_lessons.count
+    assert_equal lesson1, lesson2.parent_lesson
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")

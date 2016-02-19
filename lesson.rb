@@ -2,6 +2,9 @@ class Lesson < ActiveRecord::Base
   has_many :readings, dependent: :destroy
   belongs_to :course
 
+  has_many :child_lessons, class_name: "Lesson", foreign_key: "parent_lesson_id"
+  belongs_to :parent_lesson, class_name: "Lesson", foreign_key: "parent_lesson_id" 
+
   belongs_to :pre_class_assignment, class_name: "Assignment", foreign_key: "pre_class_assignment_id"
   belongs_to :in_class_assignment, class_name: "Assignment", foreign_key: "in_class_assignment_id"
 
