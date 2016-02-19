@@ -4,7 +4,7 @@ class Course < ActiveRecord::Base
   has_many :readings, through: :lessons, dependent: :destroy
   has_many :course_students, dependent: :restrict_with_error
   has_many :assignments, dependent: :destroy
-  has_many :course_instructors
+  has_many :course_instructors, dependent: :restrict_with_error
 
   validates :name, presence: true
   validates :course_code, presence: true, uniqueness: true, format: {with: /[a-zA-Z]{3}\d{3}/}
