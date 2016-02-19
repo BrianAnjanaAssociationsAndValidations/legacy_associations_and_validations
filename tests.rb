@@ -90,11 +90,50 @@ class ApplicationTest < Minitest::Test
     refute course.destroy
   end
 
-  # Associate assignments with courses (both directions). When a course is destroyed, its assignments should be automatically destroyed.
+  # Associate assignments with courses (both directions).
+  def test_assignments_are_associated_with_courses
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    assignment = Assignment.create(name: "Battleship")
+    assignment_two = Assignment.create(name: "Currency Converter")
+    assignment_three = Assignment.create(name: "Time Entries")
 
+    assert course.assignments << assignment
+    assert course.assignments << assignment_two
+    assert course.assignments << assignment_three
+
+    assert_equal 3, course.assignments.count
+  end
+
+  # When a course is destroyed, its assignments should be automatically destroyed.
+  def test_assignments_are_deleted_when_course_is_deleted
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    assignment = Assignment.create(name: "Battleship")
+    assignment_two = Assignment.create(name: "Currency Converter")
+    assignment_three = Assignment.create(name: "Time Entries")
+
+    assert course.assignments << assignment
+    assert course.assignments << assignment_two
+    assert course.assignments << assignment_three
+
+    assert course.destroy
+    refute Assignment.exists?(assignment.id)
+    refute Assignment.exists?(assignment_two.id)
+    refute Assignment.exists?(assignment_three.id)
+  end
 
   # Associate lessons with their pre_class_assignments (both directions).
-
+  # def test_lessons_are_associated_with_their_pre_class_assignments
+  #   lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+  #   assignment = Assignment.create(name: "Variables")
+  #   assignment_two = Assignment.create(name: "Equation")
+  #   assignment_three = Assignment.create(name: "Polynomials")
+  #
+  #   assert lesson.pre_class_assignments << assignment
+  #   assert lesson.pre_class_assignments << assignment_two
+  #   assert lesson.pre_class_assignments << assignment_three
+  #
+  #   assert_equal 3, lesson.pre_class_assignments
+  # end
 
   # Set up a School to have many courses through the school's terms.
 
