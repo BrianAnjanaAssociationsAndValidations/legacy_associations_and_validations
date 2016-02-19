@@ -242,64 +242,64 @@ class ApplicationTest < Minitest::Test
 
   # Validate that Lessons have names.
   def test_lesson_must_have_names
-    lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
-    lesson_two = Lesson.create(description: "Lorem ipsum")
+    lesson = Lesson.new(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    lesson_two = Lesson.new(description: "Lorem ipsum")
 
-    assert Lesson.exists?(lesson.id)
-    refute Lesson.exists?(lesson_two.id)
+    assert lesson.save
+    refute lesson_two.save
   end
 
   # Validate that Readings must have an order_number, a lesson_id, and a url.
   def test_readings_must_have_order_number_lesson_id_and_url
-    reading = Reading.create(order_number: 1234, lesson_id: 223, url: "http://www.google.com")
-    reading_two = Reading.create(caption: "Back to Basics", url: "http://stopfailingatmaths.com", order_number: 1)
-    reading_three = Reading.create()
+    reading = Reading.new(order_number: 1234, lesson_id: 223, url: "http://www.google.com")
+    reading_two = Reading.new(caption: "Back to Basics", url: "http://stopfailingatmaths.com", order_number: 1)
+    reading_three = Reading.new()
 
-    assert Reading.exists?(reading.id)
-    refute Reading.exists?(reading_two.id)
-    refute Reading.exists?(reading_three.id)
+    assert reading.save
+    refute reading_two.save
+    refute reading_three.save
   end
 
   # Validate that the Readings url must start with http:// or https://. Use a regular expression.
   def test_readings_url_are_real
-    reading = Reading.create(order_number: 1234, lesson_id: 223, url: "www.google.com")
-    reading_two = Reading.create(order_number: 1, lesson_id: 254, url: "http://stopfailingatmaths.com")
+    reading = Reading.new(order_number: 1234, lesson_id: 223, url: "www.google.com")
+    reading_two = Reading.new(order_number: 1, lesson_id: 254, url: "http://stopfailingatmaths.com")
 
-    assert Reading.exists?(reading_two.id)
-    refute Reading.exists?(reading.id)
+    assert reading_two.save
+    refute reading.save
   end
 
   # Validate that Courses have a course_code and a name.
   def test_courses_must_have_course_code_and_name
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
-    course_one = Course.create(course_code: "JST600", color: "Mustard")
-    course_two = Course.create(name: "Front End", color: "Mustard")
+    course = Course.new(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.new(course_code: "JST600", color: "Mustard")
+    course_two = Course.new(name: "Front End", color: "Mustard")
 
-    assert Course.exists?(course.id)
-    refute Course.exists?(course_one.id)
-    refute Course.exists?(course_two.id)
+    assert course.save
+    refute course_one.save
+    refute course_two.save
   end
 
   # Validate that the course_code is unique within a given term_id.
   def test_course_codes_are_unique_in_given_term
-    course = Course.create(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "DEF456", color: "Mustard")
-    course_two = Course.create(name: "Javascript", course_code: "DEF456", color: "Mustard")
+    course = Course.new(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
+    course_one = Course.new(name: "Front End", course_code: "DEF456", color: "Mustard")
+    course_two = Course.new(name: "Javascript", course_code: "DEF456", color: "Mustard")
 
-    assert Course.exists?(course.id)
-    assert Course.exists?(course_one.id)
-    refute Course.exists?(course_two.id)
+    assert course.save
+    assert course_one.save
+    refute course_two.save
   end
 
   # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
   def test_course_code_format
-    course = Course.create(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "DE456", color: "Mustard")
-    course_two = Course.create(name: "Javascript", course_code: "DEF6", color: "Mustard")
+    course = Course.new(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
+    course_one = Course.new(name: "Front End", course_code: "DE456", color: "Mustard")
+    course_two = Course.new(name: "Javascript", course_code: "DEF6", color: "Mustard")
 
-    assert Course.exists?(course.id)
-    refute Course.exists?(course_one.id)
-    refute Course.exists?(course_two.id)
+    assert course.save
+    refute course_one.save
+    refute course_two.save
   end
 
 end
