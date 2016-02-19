@@ -15,12 +15,17 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord::Migration.verbose = false
 # Gotta run migrations before we can run tests.  Down will fail the first time,
 # so we wrap it in a begin/rescue.
-begin ApplicationMigration.migrate(:down); rescue; end
-ApplicationMigration.migrate(:up)
-
 
 # Finally!  Let's test the thing.
 class ApplicationTest < Minitest::Test
+
+  def setup
+    begin ApplicationMigration.migrate(:up); rescue; end
+  end
+
+  def teardown
+    ApplicationMigration.migrate(:down)
+  end
 
   def test_truth
     assert true
@@ -281,6 +286,15 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that the course_code is unique within a given term_id.
+  def test_course_codes_are_unique_in_given_term
+    course = Course.create(name: "Ruby on Rails", course_code: "1235", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "6789", color: "Mustard")
+    course_two = Course.create(name: "Javascript", course_code: "6789", color: "Mustard")
+
+    assert Course.exists?(course.id)
+    assert Course.exists?(course_one.id)
+    refute Course.exists?(course_two.id)
+  end
 
 
   # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
