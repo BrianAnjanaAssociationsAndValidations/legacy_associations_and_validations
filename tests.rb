@@ -107,15 +107,25 @@ class ApplicationTest < Minitest::Test
     assert school2.save
   end
 
+  #Validate that Terms must have name, starts_on, ends_on, and school_id.
+  def test_terms_validation
+    school = School.create(name: "The Iron Yard")
+    term = Term.new(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    term_two = Term.new(name: "Fall 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    school.terms << term
+    assert term.save
+    refute term_two.save
+  end
+
   def test_user_must_have_first_name_last_name_and_email
-    user = User.create
-    user2 = User.create(first_name: "Brian")
-    user3 = User.create(first_name: "Brian", last_name: "Yarsawich")
-    user4 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "testing@test.com")
-    refute User.exists?(user.id)
-    refute User.exists?(user2.id)
-    refute User.exists?(user3.id)
-    assert User.exists?(user4.id)
+    user = User.new
+    user2 = User.new(first_name: "Brian")
+    user3 = User.new(first_name: "Brian", last_name: "Yarsawich")
+    user4 = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testing@test.com")
+    refute user.save
+    refute user2.save
+    refute user3.save
+    assert user4.save
   end
 
   def test_user_email_must_be_unique
@@ -132,11 +142,18 @@ class ApplicationTest < Minitest::Test
     refute user2.save
   end
 
+  def test_user_photo_url_must_start_as_web_address
+    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com")
+    user2 = User.new(first_name: "John", last_name: "Doe", email: "testphotourl2@test.com", photo_url: "not.a.web.address.com")
+    assert user.save
+    refute user2.save
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
     term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
-    term_two = Term.create(name: "Fall 2016 Cohort")
+    term_two = Term.create(name: "Fall 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
 
     assert school.terms << term
     assert school.terms << term_two
@@ -146,10 +163,11 @@ class ApplicationTest < Minitest::Test
 
   # Associate terms with courses (both directions).
   def test_terms_are_associated_with_courses
-    term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "JST600", color: "Mustard")
-
+    school = School.create(name: "The Iron Yard")
+    term = Term.new(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
+    course = Course.new(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.new(name: "Front End", course_code: "JST600", color: "Mustard")
+    school.terms << term
     assert term.courses << course
     assert term.courses << course_one
 
