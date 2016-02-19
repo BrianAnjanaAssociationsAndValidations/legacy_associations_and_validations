@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   scope :want_to_be_instructors, -> { where(wants_to_be_instructor: true) }
   scope :instructors_for_school_id, ->(school_id) { where(school_id: school_id, instructor: true) }
 
-  default_scope { order('last_name, first_name') }
+  # default_scope { order('last_name, first_name') }
 
   def full_name
     "#{title + " " if title}#{first_name} #{padded_middle_initial}#{last_name}"
