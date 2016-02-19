@@ -7,7 +7,8 @@ class Course < ActiveRecord::Base
   has_many :course_instructors, dependent: :restrict_with_error
   has_many :students, through: :course_students
   has_many :instructors, through: :course_instructors
-
+  has_one :course_primary_instructor, -> {where primary: true}, class_name: "CourseInstructor", foreign_key: "instructor_id"
+  has_one :primary_instructor, through: :course_primary_instructor
   validates :name, presence: true
   validates :course_code, presence: true, format: {with: /[a-zA-Z]{3}\d{3}/}, uniqueness: {scope: :term_id}
 

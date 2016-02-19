@@ -239,6 +239,19 @@ class ApplicationTest < Minitest::Test
     assert_equal 2, course.course_students.count
   end
 
+  def test_course_has_one_primary_instructor
+    instructor1 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com", instructor: true)
+    instructor2 = User.create(first_name: "John", last_name: "Doe", email: "testphotourl2@test.com", photo_url: "http://is.a.web.address.com", instructor: true)
+    instructor3 = User.create(first_name: "Da-Me", last_name: "Kim", email: "dame@email.com", instructor: true)
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet", term_id: 10)
+
+    assert course.primary_instructor = instructor1
+    assert course.instructors << instructor2
+    assert course.instructors << instructor3
+
+    assert_equal instructor1, course.primary_instructor
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")
