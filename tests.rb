@@ -247,9 +247,11 @@ class ApplicationTest < Minitest::Test
 
     assert course.primary_instructor = instructor1
     assert course.instructors << instructor2
-    assert course.instructors << instructor3
 
     assert_equal instructor1, course.primary_instructor
+
+    assert course.primary_instructor = instructor3
+    assert_equal instructor3, course.primary_instructor
   end
 
   # Associate schools with terms (both directions).
