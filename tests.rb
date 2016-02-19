@@ -255,6 +255,21 @@ class ApplicationTest < Minitest::Test
     assert_equal instructor3, course.primary_instructor
   end
 
+  def test_students_are_ordered_by_last_name_then_first_name
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet", term_id: 10)
+    student1 = User.create(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com")
+    student2 = User.create(first_name: "John", last_name: "Doe", email: "testphotourl2@test.com", photo_url: "http://is.a.web.address.com")
+    student3 = User.create(first_name: "Da-Me", last_name: "Kim", email: "dame@email.com")
+    student4 = User.create(first_name: "Kim", last_name: "Doe", email: "dame2@email.com")
+
+    course.students << student1
+    course.students << student2
+    course.students << student3
+    course.students << student4
+
+    assert_equal [student2, student4, student3, student1], course.students
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")

@@ -5,7 +5,7 @@ class Course < ActiveRecord::Base
   has_many :course_students, dependent: :restrict_with_error
   has_many :assignments, dependent: :destroy
   has_many :course_instructors, dependent: :restrict_with_error
-  has_many :students, through: :course_students
+  has_many :students, -> {order 'last_name, first_name'}, through: :course_students
   has_many :instructors, through: :course_instructors
   has_one :course_primary_instructor, -> {where primary: true}, class_name: "CourseInstructor", foreign_key: "instructor_id"
   has_one :primary_instructor, through: :course_primary_instructor
