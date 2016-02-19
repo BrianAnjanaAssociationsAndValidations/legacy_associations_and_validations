@@ -413,4 +413,37 @@ class ApplicationTest < Minitest::Test
     refute course_two.save
   end
 
+  # Associate course_instructors with instructors (who happen to be users)
+  def test_course_instructors_are_associated_with_instructors
+    mason = User.create(first_name: "Mason", last_name: "Matthews", email: "mason@email.com", photo_url: "https://avatars1.githubusercontent.com/u/5350842?v=3&s=400")
+    class_one = CourseInstructor.create
+    class_two = CourseInstructor.create
+
+    class_one.instructor = mason
+    class_two.instructor = mason
+
+    class_one.save
+    class_two.save
+
+    assert_equal 2, mason.instructors.count
+  end
+
+  # Associate assignments with assignment_grades (both directions)
+  def test_assignments_are_associated_with_assignment_grades
+    assignment = Assignment.create(name: "Battleship", percent_of_grade: 10, course_id: 2)
+
+    grade = AssignmentGrade.create(final_grade: "A")
+    grade_two = AssignmentGrade.create(final_grade: "B")
+
+    assert assignment.assignment_grades << grade
+    assert assignment.assignment_grades << grade_two
+
+    assert_equal 2, assignment.assignment_grades.count
+  end
+
+  # Set up a Course to have many instructors through the Course's course_instructors.
+
+  # Validate that an Assignment's due_at field is not before the Assignment's active_at.
+
+
 end
