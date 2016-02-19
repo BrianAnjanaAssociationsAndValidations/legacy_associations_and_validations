@@ -56,7 +56,7 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_courses_has_many_lessons
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     lesson1 = Lesson.create(name: "Algerbra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
     lesson2 = Lesson.create(name: "Basketweaving", description: "For all our sports stars", outline: "Weave a basket and get an A")
 
@@ -81,7 +81,7 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_course_has_many_readings_through_lessons
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     lesson1 = Lesson.create(name: "Algerbra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
     lesson2 = Lesson.create(name: "Basketweaving", description: "For all our sports stars", outline: "Weave a basket and get an A")
     reading1 = Reading.create(caption: "Back to Basics", url: "http://stopfailingatmaths.com", order_number: 1)
@@ -140,8 +140,8 @@ class ApplicationTest < Minitest::Test
   # Associate terms with courses (both directions).
   def test_terms_are_associated_with_courses
     term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "JS6", color: "Mustard")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "JST600", color: "Mustard")
 
     assert term.courses << course
     assert term.courses << course_one
@@ -152,8 +152,8 @@ class ApplicationTest < Minitest::Test
   # If a term has any courses associated with it, the term should not be deletable.
   def test_if_a_term_has_courses_it_can_not_be_deleted
     term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "JS6", color: "Mustard")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "JST600", color: "Mustard")
 
     assert term.courses << course
     assert term.courses << course_one
@@ -163,7 +163,7 @@ class ApplicationTest < Minitest::Test
 
   # Associate courses with course_students (both directions).
   def test_courses_are_associated_with_course_students
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     student = CourseStudent.create(student_id: 1)
     student_two = CourseStudent.create(student_id: 2)
 
@@ -175,7 +175,7 @@ class ApplicationTest < Minitest::Test
 
   # If the course has any students associated with it, the course should not be deletable.
   def test_courses_are_associated_with_course_students
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     student = CourseStudent.create(student_id: 1)
     student_two = CourseStudent.create(student_id: 2)
 
@@ -187,7 +187,7 @@ class ApplicationTest < Minitest::Test
 
   # Associate assignments with courses (both directions).
   def test_assignments_are_associated_with_courses
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     assignment = Assignment.create(name: "Battleship")
     assignment_two = Assignment.create(name: "Currency Converter")
     assignment_three = Assignment.create(name: "Time Entries")
@@ -201,7 +201,7 @@ class ApplicationTest < Minitest::Test
 
   # When a course is destroyed, its assignments should be automatically destroyed.
   def test_assignments_are_deleted_when_course_is_deleted
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     assignment = Assignment.create(name: "Battleship")
     assignment_two = Assignment.create(name: "Currency Converter")
     assignment_three = Assignment.create(name: "Time Entries")
@@ -234,8 +234,8 @@ class ApplicationTest < Minitest::Test
   def test_school_can_have_many_courses_through_terms
     school = School.create(name: "The Iron Yard")
     term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22")
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "JS6", color: "Mustard")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "JST600", color: "Mustard")
 
     school.terms << term
     term.courses << course
@@ -276,8 +276,8 @@ class ApplicationTest < Minitest::Test
 
   # Validate that Courses have a course_code and a name.
   def test_courses_must_have_course_code_and_name
-    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
-    course_one = Course.create(course_code: "JS6", color: "Mustard")
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.create(course_code: "JST600", color: "Mustard")
     course_two = Course.create(name: "Front End", color: "Mustard")
 
     assert Course.exists?(course.id)
@@ -287,16 +287,24 @@ class ApplicationTest < Minitest::Test
 
   # Validate that the course_code is unique within a given term_id.
   def test_course_codes_are_unique_in_given_term
-    course = Course.create(name: "Ruby on Rails", course_code: "1235", color: "Violet")
-    course_one = Course.create(name: "Front End", course_code: "6789", color: "Mustard")
-    course_two = Course.create(name: "Javascript", course_code: "6789", color: "Mustard")
+    course = Course.create(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "DEF456", color: "Mustard")
+    course_two = Course.create(name: "Javascript", course_code: "DEF456", color: "Mustard")
 
     assert Course.exists?(course.id)
     assert Course.exists?(course_one.id)
     refute Course.exists?(course_two.id)
   end
 
-
   # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
+  def test_course_code_format
+    course = Course.create(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "DE456", color: "Mustard")
+    course_two = Course.create(name: "Javascript", course_code: "DEF6", color: "Mustard")
+
+    assert Course.exists?(course.id)
+    refute Course.exists?(course_one.id)
+    refute Course.exists?(course_two.id)
+  end
 
 end
