@@ -1,5 +1,4 @@
 class Assignment < ActiveRecord::Base
-  belongs_to :assignment
   belongs_to :lesson
   belongs_to :course
   validates :name, presence: true
