@@ -106,6 +106,17 @@ class ApplicationTest < Minitest::Test
     assert 2, course.course_instructors.count
   end
 
+  def test_course_with_instructors_can_not_be_deleted
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    instructor1 = CourseInstructor.create(instructor_id: 1)
+    instructor2 = CourseInstructor.create(instructor_id: 2)
+
+    course.course_instructors << instructor1
+    course.course_instructors << instructor2
+
+    refute course.destroy
+  end
+
   def test_lessons_are_associated_with_their_in_class_assignments
     course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
     lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
