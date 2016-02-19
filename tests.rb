@@ -407,6 +407,17 @@ class ApplicationTest < Minitest::Test
   end
 
   # Associate assignments with assignment_grades (both directions)
+  def test_assignments_are_associated_with_assignment_grades
+    assignment = Assignment.create(name: "Battleship", percent_of_grade: 10, course_id: 2)
+
+    grade = AssignmentGrade.create(final_grade: "A")
+    grade_two = AssignmentGrade.create(final_grade: "B")
+
+    assert assignment.assignment_grades << grade
+    assert assignment.assignment_grades << grade_two
+
+    assert_equal 2, assignment.assignment_grades.count
+  end
 
   # Set up a Course to have many instructors through the Course's course_instructors.
 
