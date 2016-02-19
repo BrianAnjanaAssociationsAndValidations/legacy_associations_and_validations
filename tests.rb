@@ -164,6 +164,19 @@ class ApplicationTest < Minitest::Test
     assert assign4.save
   end
 
+  def test_assignments_have_unique_name_for_each_course_id
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "JST600", color: "Mustard")
+    assign1 = Assignment.new(name: "Final", percent_of_grade: 20)
+    assign2 = Assignment.new(name: "Quiz1", percent_of_grade: 5.2)
+    assign3 = Assignment.new(name: "Quiz1", percent_of_grade: 20.2)
+
+    assert course.assignments << assign1
+    assert course.assignments << assign2
+    refute course.assignments << assign3
+    assert course_one.assignments << assign3
+  end
+
   # Associate schools with terms (both directions).
   def test_schools_are_associated_with_terms
     school = School.create(name: "The Iron Yard")

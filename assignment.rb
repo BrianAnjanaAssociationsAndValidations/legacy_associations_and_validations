@@ -2,7 +2,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :assignment
   belongs_to :lesson
   belongs_to :course
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: {scope: :course_id}
   validates :percent_of_grade, presence: true
   validates :course_id, presence: true
 
