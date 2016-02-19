@@ -66,8 +66,29 @@ class ApplicationTest < Minitest::Test
     refute term.destroy
   end
 
-  # Associate courses with course_students (both directions). If the course has any students associated with it, the course should not be deletable.
+  # Associate courses with course_students (both directions).
+  def test_courses_are_associated_with_course_students
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    student = CourseStudent.create(student_id: 1)
+    student_two = CourseStudent.create(student_id: 2)
 
+    assert course.course_students << student
+    assert course.course_students << student_two
+
+    assert_equal 2, course.course_students.count
+  end
+
+  # If the course has any students associated with it, the course should not be deletable.
+  def test_courses_are_associated_with_course_students
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    student = CourseStudent.create(student_id: 1)
+    student_two = CourseStudent.create(student_id: 2)
+
+    assert course.course_students << student
+    assert course.course_students << student_two
+
+    refute course.destroy
+  end
 
   # Associate assignments with courses (both directions). When a course is destroyed, its assignments should be automatically destroyed.
 
