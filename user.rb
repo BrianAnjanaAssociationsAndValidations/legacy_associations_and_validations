@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :instructors, class_name: "CourseInstructor", foreign_key: "instructor_id"
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: /\A[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\z/i}
