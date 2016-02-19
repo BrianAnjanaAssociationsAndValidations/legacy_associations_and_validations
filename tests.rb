@@ -96,8 +96,14 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_course_has_many_course_instructors
-    # course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
-    # instructor1 = Instructor.create(name:)
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR6", color: "Violet")
+    instructor1 = CourseInstructor.create(instructor_id: 1)
+    instructor2 = CourseInstructor.create(instructor_id: 2)
+
+    assert course.course_instructors << instructor1
+    assert course.course_instructors << instructor2
+
+    assert 2, course.course_instructors.count
   end
 
   def test_lessons_are_associated_with_their_in_class_assignments
