@@ -100,6 +100,17 @@ class ApplicationTest < Minitest::Test
     # instructor1 = Instructor.create(name:)
   end
 
+  def test_lessons_are_associated_with_their_in_class_assignments
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+    lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    assignment = Assignment.create(name: "Variables", percent_of_grade: 10)
+
+    course.assignments << assignment
+    assert assignment.in_class_assignments << lesson
+
+    assert_equal Assignment.find(assignment.id), lesson.in_class_assignment
+  end
+
   def test_school_must_have_name
     school = School.new
     school2 = School.new(name: "The Iron Yard")
