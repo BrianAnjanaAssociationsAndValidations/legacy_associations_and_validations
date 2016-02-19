@@ -240,7 +240,13 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that Lessons have names.
+  def test_lesson_must_have_names
+    lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    lesson_two = Lesson.create(description: "Lorem ipsum")
 
+    assert Lesson.exists?(lesson.id)
+    refute Lesson.exists?(lesson_two.id)
+  end
 
   # Validate that Readings must have an order_number, a lesson_id, and a url.
 

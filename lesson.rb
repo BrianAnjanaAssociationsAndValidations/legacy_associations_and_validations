@@ -2,6 +2,8 @@ class Lesson < ActiveRecord::Base
   has_many :readings, dependent: :destroy
   belongs_to :course
 
+  validates :name, presence: true
+
   delegate :code_and_name, to: :course, prefix: true
 
   scope :roots, -> { where("parent_lesson_id IS NULL") }
