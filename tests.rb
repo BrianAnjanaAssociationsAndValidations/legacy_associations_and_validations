@@ -217,18 +217,14 @@ class ApplicationTest < Minitest::Test
   end
 
   # Associate lessons with their pre_class_assignments (both directions).
-  # def test_lessons_are_associated_with_their_pre_class_assignments
-  #   lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
-  #   assignment = Assignment.create(name: "Variables")
-  #   assignment_two = Assignment.create(name: "Equation")
-  #   assignment_three = Assignment.create(name: "Polynomials")
-  #
-  #   assert lesson.pre_class_assignments << assignment
-  #   assert lesson.pre_class_assignments << assignment_two
-  #   assert lesson.pre_class_assignments << assignment_three
-  #
-  #   assert_equal 3, lesson.pre_class_assignments
-  # end
+  def test_lessons_are_associated_with_their_pre_class_assignments
+    lesson = Lesson.create(name:"Algebra Basics", description: "Basic intro into the wonderful world of Algebra", outline: "See math, do math")
+    assignment = Assignment.create(name: "Variables")
+
+    assert lesson.pre_class_assignment = assignment
+
+    assert_equal Assignment.find(assignment.id), lesson.pre_class_assignment
+  end
 
   # Set up a School to have many courses through the school's terms.
   def test_school_can_have_many_courses_through_terms
@@ -263,7 +259,6 @@ class ApplicationTest < Minitest::Test
     refute Reading.exists?(reading_two.id)
     refute Reading.exists?(reading_three.id)
   end
-
 
   # Validate that the Readings url must start with http:// or https://. Use a regular expression.
   def test_readings_url_are_real

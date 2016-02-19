@@ -1,5 +1,6 @@
 class Assignment < ActiveRecord::Base
   belongs_to :assignment
+  belongs_to :lesson
 
   scope :active_for_students, -> { where("active_at <= ? AND due_at >= ? AND students_can_submit = ?", Time.now, Time.now, true) }
 
