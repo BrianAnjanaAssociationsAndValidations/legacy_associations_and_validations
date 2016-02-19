@@ -356,13 +356,17 @@ class ApplicationTest < Minitest::Test
 
   # Validate that the course_code is unique within a given term_id.
   def test_course_codes_are_unique_in_given_term
-    course = Course.new(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
-    course_one = Course.new(name: "Front End", course_code: "DEF456", color: "Mustard")
-    course_two = Course.new(name: "Javascript", course_code: "DEF456", color: "Mustard")
+    term = Term.create(name: "Spring 2016 Cohort", starts_on: "2016-02-01", ends_on: "2016-05-22", school_id: 3)
+    term_two = Term.create(name: "Fall 2016 Cohort", starts_on: "2016-09-01", ends_on: "2016-011-22", school_id: 5)
 
-    assert course.save
-    assert course_one.save
-    refute course_two.save
+    course = Course.create(name: "Ruby on Rails", course_code: "ABC123", color: "Violet")
+    course_one = Course.create(name: "Front End", course_code: "DEF456", color: "Mustard")
+    course_two = Course.create(name: "Javascript", course_code: "DEF456", color: "Mustard")
+
+    assert term.courses << course
+    assert term.courses << course_one
+    refute term.courses << course_two
+    assert term_two.courses << course_two
   end
 
   # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
