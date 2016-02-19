@@ -3,7 +3,7 @@ class Course < ActiveRecord::Base
   has_many :lessons, dependent: :destroy
   has_many :readings, through: :lessons, dependent: :destroy
   has_many :course_students, dependent: :restrict_with_error
-  has_many :assignments, dependent: :destroy
+  has_many :assignments, -> {order 'assignments.due_at, assignments.active_at'}, dependent: :destroy
   has_many :course_instructors, dependent: :restrict_with_error
   has_many :students, through: :course_students
   has_many :instructors, through: :course_instructors

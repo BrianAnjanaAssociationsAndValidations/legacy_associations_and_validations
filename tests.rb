@@ -496,4 +496,21 @@ class ApplicationTest < Minitest::Test
     refute currency.save
   end
 
+  # A Course's assignments should be ordered by due_at, then active_at.
+  def test_courses_assignments_are_ordered_by_due_at_then_active_at
+    assignment = Assignment.new(name: "Battleship", percent_of_grade: 10, due_at: "2016-09-15", active_at: "2016-09-01")
+    assignment_two = Assignment.new(name: "Currency", percent_of_grade: 10, due_at: "2016-09-05", active_at: "2016-09-01")
+    assignment_three = Assignment.new(name: "Time entry", percent_of_grade: 10, due_at: "2016-09-15", active_at: "2016-08-01")
+
+    course = Course.create(name: "Ruby on Rails", course_code: "ROR600", color: "Violet")
+
+    course.assignments << assignment
+    course.assignments << assignment_two
+    course.assignments << assignment_three
+
+    assert_equal 3, course.assignments.count
+
+    assert_equal [assignment_two, assignment_three, assignment], course.assignments.to_a
+  end
+
 end
