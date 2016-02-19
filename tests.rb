@@ -206,14 +206,25 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_students_are_associated_with_course_students
-    maths_student = CourseStudent.new
-    english_student = CourseStudent.new
-    user = User.new(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com")
+    maths_student = CourseStudent.create
+    english_student = CourseStudent.create
+    user = User.create(first_name: "Brian", last_name: "Yarsawich", email: "testphotourl1@test.com", photo_url: "http://www.reddit.com")
 
     assert user.students << maths_student
     assert user.students << english_student
 
-    assert 2, user.students.count
+    assert_equal 2, user.students.count
+  end
+
+  def test_course_student_associated_with_assignment_grades
+    student = CourseStudent.create(student_id: 10)
+    grade = AssignmentGrade.new
+    grade2 = AssignmentGrade.new
+
+    assert student.assignment_grades << grade
+    assert student.assignment_grades << grade2
+
+    assert_equal 2, student.assignment_grades.count
   end
 
   # Associate schools with terms (both directions).
