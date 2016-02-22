@@ -39,4 +39,4 @@ This code was forked from https://github.com/tiyd-rails-2016-01/legacy_associati
 
 ## Team
 
-Worked on by @anjanamohanty and @byarsawich
+Worked on by [Anjana Mohanty](https://github.com/anjanamohanty) and [Brian Yarsawich](https://github.com/byarsawich)
